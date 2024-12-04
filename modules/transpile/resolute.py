@@ -11,6 +11,7 @@ class Resolute:
                  path: str = ''):
 
         self.file_system = FileSystem()
+        self.function_path = ''
 
         if path.strip() != '':
             self.resolve(path)
@@ -44,6 +45,19 @@ class Resolute:
                                                     f" { os.path.join(path, keys['resources']) } {path}")
                                     pass
 
+                        if 'functions' in keys:
+                            if keys['functions'].startswith('/'):
+                                keys['functions'] = keys['functions'][1:]
+
+                            if not os.path.exists(os.path.join(path, keys["functions"])):
+                                raise Exception(f"functions path not found, Full path:"
+                                                f" {os.path.join(path, keys['functions'])} {path}")
+                                pass
+
+                            self.function_path = keys["functions"]
+                        else:
+                            raise Exception(f"No functions path provided")
+
                         print(keys)
                     except Exception as e:
                         raise Exception(f"File {CONF_FILE} Error while reading: {e}")
@@ -56,4 +70,10 @@ class Resolute:
             pass
         else:
             raise Exception(f"Provided directory not found {path}")
+        pass
+
+    def analyze_file_ramification(self):
+
+
+
         pass
